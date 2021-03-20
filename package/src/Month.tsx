@@ -1,22 +1,24 @@
 import React from "react"; // , { useEffect, useState }
-import moment, { Moment } from "moment";
+import dayjs, { Dayjs } from "dayjs";
 import Day from "./Day";
 import { range } from "./utils";
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(isBetween);
 
 interface Props {
   year: number;
   month: number;
   forceFullWeeks: boolean;
   showWeekSeparators: boolean;
-  selectedDay: Moment;
+  selectedDay: Dayjs;
   firstDayOfWeek: number;
-  selectingRange?: Moment[];
+  selectingRange?: Dayjs[];
   selectRange: boolean;
-  selectedRange?: Moment[];
+  selectedRange?: Dayjs[];
   customClasses?: any | (() => void);
-  titles?: (m: Moment) => string;
-  dayClicked: (day: Moment, classes: any) => void;
-  dayHovered: (day: Moment) => void;
+  titles?: (m: Dayjs) => string;
+  dayClicked: (day: Dayjs, classes: any) => void;
+  dayHovered: (day: Dayjs) => void;
 }
 
 const defaultProps = {
@@ -108,11 +110,11 @@ const Month = (props: Props) => {
   //   }
   // }, [props.selectingRange]);
 
-  const dayClicked = (day: Moment, classes: any) => {
+  const dayClicked = (day: Dayjs, classes: any) => {
     props.dayClicked(day, classes);
   };
 
-  const dayHovered = (day: Moment) => {
+  const dayHovered = (day: Dayjs) => {
     if (props.selectRange) {
       props.dayHovered(day);
     }
@@ -132,7 +134,7 @@ const Month = (props: Props) => {
       customClasses,
       titles,
     } = props;
-    const monthStart = moment([year, month, 1]); // current day
+    const monthStart = dayjs(new Date(year, month, 1)); // current day
 
     // number of days to insert before the first of the month to correctly align the weekdays
     let prevMonthDaysCount = monthStart.weekday();
@@ -148,7 +150,7 @@ const Month = (props: Props) => {
     // day-generating loop
     const days: JSX.Element[] = [];
     range(firstDayOfWeek + 1, totalDays + firstDayOfWeek + 1).forEach((i) => {
-      const day = moment([year, month, i - prevMonthDaysCount]);
+      const day = dayjs(new Date(year, month, i - prevMonthDaysCount));
 
       // pick appropriate classes
       const classes: string[] = [];
@@ -212,8 +214,8 @@ const Month = (props: Props) => {
               classes.push(k);
             }
           } else if (obj.start && obj.end) {
-            const startDate = moment(obj.start, "YYYY-MM-DD").add(-1, "days");
-            const endDate = moment(obj.end, "YYYY-MM-DD").add(1, "days");
+            const startDate = dayjs(obj.start, "YYYY-MM-DD").add(-1, "days");
+            const endDate = dayjs(obj.end, "YYYY-MM-DD").add(1, "days");
             if (day.isBetween(startDate, endDate)) {
               classes.push(k);
             }
@@ -245,7 +247,7 @@ const Month = (props: Props) => {
   return (
     <tr>
       <td className="month-name">
-        {moment([props.year, props.month, 1]).format("MMM")}
+        {dayjs(new Date(props.year, props.month, 1)).format("MMM")}
       </td>
       {renderMonthDays()}
     </tr>

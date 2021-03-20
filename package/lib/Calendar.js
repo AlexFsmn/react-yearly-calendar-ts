@@ -10,9 +10,13 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import React, { useState } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 import Month from "./Month";
 import { range } from "./utils";
+import isoWeek from "dayjs/plugin/isoWeek";
+import weekday from "dayjs/plugin/weekday";
+dayjs.extend(isoWeek);
+dayjs.extend(weekday);
 var defaultProps = {
     forceFullWeeks: false,
     showDaysOfWeek: true,
@@ -22,14 +26,15 @@ var defaultProps = {
     selectRange: false,
     onPickDate: null,
     onPickRange: null,
-    selectedDay: moment(),
+    selectedDay: dayjs(),
     customClasses: null,
     titles: null,
 };
 function Calendar(props) {
     var _a = useState(), selectingRange = _a[0], setSelectingRange = _a[1];
-    // let selectingRange: Moment[] = [];
-    // const setSelectingRange = (t: any) => {}
+    if (props.locale) {
+        dayjs.locale(props.locale);
+    }
     var dayClicked = function (date, classes) {
         if (!date) {
             // clicked on prev or next month
@@ -72,24 +77,24 @@ function Calendar(props) {
         var totalDays = forceFullWeeks ? 42 : 37;
         var days = [];
         range(firstDayOfWeek, totalDays + firstDayOfWeek).forEach(function (i) {
-            var momentDay = useIsoWeekday
-                ? moment().isoWeekday(i)
-                : moment().weekday(i);
-            var day = momentDay.format("ddd").charAt(0);
+            var dayjsDay = useIsoWeekday
+                ? dayjs().isoWeekday(i)
+                : dayjs().weekday(i);
+            var day = dayjsDay.format("ddd").charAt(0);
             if (showWeekSeparators) {
                 if (i % 7 === firstDayOfWeek && days.length) {
                     // push week separator
                     days.push(React.createElement("th", { className: "week-separator", key: "seperator-" + i }));
                 }
             }
-            days.push(React.createElement("th", { key: "weekday-" + i, className: i % 7 === 0 ? "bolder" : "" }, day));
+            days.push(React.createElement("th", { key: "weekday-" + i, className: i % 7 === 0 ? "bolder" : "" }, day.toUpperCase()));
         });
         return (React.createElement("tr", null,
             React.createElement("th", null, "\u00A0"),
             days));
     };
     var months = function () {
-        return range(0, 12, 1).map(function (month) { return (React.createElement(Month, __assign({ month: month, key: "month-" + month, dayClicked: function (d, classes) { return dayClicked(d, classes); }, dayHovered: function (d) { return dayHovered(d); } }, props, { selectingRange: selectingRange }))); });
+        return range(0, 12).map(function (month) { return (React.createElement(Month, __assign({ month: month, key: "month-" + month, dayClicked: function (d, classes) { return dayClicked(d, classes); }, dayHovered: function (d) { return dayHovered(d); } }, props, { selectingRange: selectingRange }))); });
     };
     return (React.createElement("table", { className: "calendar" },
         React.createElement("thead", { className: "day-headers" }, props.showDaysOfWeek ? renderDaysOfWeek() : null),

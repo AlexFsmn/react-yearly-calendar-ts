@@ -1,19 +1,19 @@
 /// <reference types="react" />
-import { Moment } from "moment";
+import { Dayjs } from "dayjs";
 interface Props {
     year: number;
     month: number;
     forceFullWeeks: boolean;
     showWeekSeparators: boolean;
-    selectedDay: Moment;
+    selectedDay: Dayjs;
     firstDayOfWeek: number;
-    selectingRange?: Moment[];
+    selectingRange?: Dayjs[];
     selectRange: boolean;
-    selectedRange?: Moment[];
+    selectedRange?: Dayjs[];
     customClasses?: any | (() => void);
-    titles?: (m: Moment) => string;
-    dayClicked: (day: Moment, classes: any) => void;
-    dayHovered: (day: Moment) => void;
+    titles?: (m: Dayjs) => string;
+    dayClicked: (day: Dayjs, classes: any) => void;
+    dayHovered: (day: Dayjs) => void;
 }
 declare const Month: {
     (props: Props): JSX.Element;

@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import moment, { Moment } from "moment";
+import dayjs, { Dayjs } from "dayjs";
 import Month from "./Month";
 import { range } from "./utils";
+import isoWeek from "dayjs/plugin/isoWeek";
+import weekday from "dayjs/plugin/weekday";
+import { Locale } from "dayjs/locale/*";
+dayjs.extend(isoWeek);
+dayjs.extend(weekday);
 
 interface Props {
   year: number;
@@ -11,12 +16,13 @@ interface Props {
   firstDayOfWeek: number;
   useIsoWeekday: boolean;
   selectRange: boolean;
-  selectedRange?: Moment[];
-  onPickDate: (date: Moment, classes: string[]) => void;
-  onPickRange: (dateFrom: Moment, dateTo: Moment) => void;
-  selectedDay: Moment;
+  selectedRange?: Dayjs[];
+  onPickDate: (date: Dayjs, classes: string[]) => void;
+  onPickRange: (dateFrom: Dayjs, dateTo: Dayjs) => void;
+  selectedDay: Dayjs;
   customClasses: any | (() => void);
-  titles: (m: Moment) => string;
+  titles: (m: Dayjs) => string;
+  locale?: Locale;
 }
 
 const defaultProps = {
@@ -28,16 +34,18 @@ const defaultProps = {
   selectRange: false,
   onPickDate: null,
   onPickRange: null,
-  selectedDay: moment(),
+  selectedDay: dayjs(),
   customClasses: null,
   titles: null,
 };
 
 function Calendar(props: Props) {
-  const [selectingRange, setSelectingRange] = useState<Moment[]>();
-  // let selectingRange: Moment[] = [];
-  // const setSelectingRange = (t: any) => {}
-  const dayClicked = (date: Moment, classes: string[]) => {
+  const [selectingRange, setSelectingRange] = useState<Dayjs[]>();
+  if (props.locale) {
+    dayjs.locale(props.locale);
+  }
+
+  const dayClicked = (date: Dayjs, classes: string[]) => {
     if (!date) {
       // clicked on prev or next month
       return;
@@ -66,7 +74,7 @@ function Calendar(props: Props) {
     }
   };
 
-  const dayHovered = (hoveredDay: Moment) => {
+  const dayHovered = (hoveredDay: Dayjs) => {
     if (!hoveredDay) {
       // clicked on prev or next month
       return;
@@ -90,10 +98,10 @@ function Calendar(props: Props) {
 
     const days: JSX.Element[] = [];
     range(firstDayOfWeek, totalDays + firstDayOfWeek).forEach((i) => {
-      const momentDay = useIsoWeekday
-        ? moment().isoWeekday(i)
-        : moment().weekday(i);
-      const day = momentDay.format("ddd").charAt(0);
+      const dayjsDay = useIsoWeekday
+        ? dayjs().isoWeekday(i)
+        : dayjs().weekday(i);
+      const day = dayjsDay.format("ddd").charAt(0);
 
       if (showWeekSeparators) {
         if (i % 7 === firstDayOfWeek && days.length) {
@@ -103,7 +111,7 @@ function Calendar(props: Props) {
       }
       days.push(
         <th key={`weekday-${i}`} className={i % 7 === 0 ? "bolder" : ""}>
-          {day}
+          {day.toUpperCase()}
         </th>
       );
     });
@@ -117,7 +125,7 @@ function Calendar(props: Props) {
   };
 
   const months = () => {
-    return range(0, 12, 1).map((month) => (
+    return range(0, 12).map((month) => (
       <Month
         month={month}
         key={`month-${month}`}

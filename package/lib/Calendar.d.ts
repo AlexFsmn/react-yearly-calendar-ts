@@ -1,5 +1,6 @@
 /// <reference types="react" />
-import moment, { Moment } from "moment";
+import dayjs, { Dayjs } from "dayjs";
+import { Locale } from "dayjs/locale/*";
 interface Props {
     year: number;
     forceFullWeeks: boolean;
@@ -8,12 +9,13 @@ interface Props {
     firstDayOfWeek: number;
     useIsoWeekday: boolean;
     selectRange: boolean;
-    selectedRange?: Moment[];
-    onPickDate: (date: Moment, classes: string[]) => void;
-    onPickRange: (dateFrom: Moment, dateTo: Moment) => void;
-    selectedDay: Moment;
+    selectedRange?: Dayjs[];
+    onPickDate: (date: Dayjs, classes: string[]) => void;
+    onPickRange: (dateFrom: Dayjs, dateTo: Dayjs) => void;
+    selectedDay: Dayjs;
     customClasses: any | (() => void);
-    titles: (m: Moment) => string;
+    titles: (m: Dayjs) => string;
+    locale?: Locale;
 }
 declare function Calendar(props: Props): JSX.Element;
 declare namespace Calendar {
@@ -26,7 +28,7 @@ declare namespace Calendar {
         selectRange: boolean;
         onPickDate: null;
         onPickRange: null;
-        selectedDay: moment.Moment;
+        selectedDay: dayjs.Dayjs;
         customClasses: null;
         titles: null;
     };

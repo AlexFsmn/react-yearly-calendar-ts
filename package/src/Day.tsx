@@ -1,11 +1,11 @@
 import React from "react";
-import { Moment } from "moment";
+import { Dayjs } from "dayjs";
 
 interface Props {
   classes: string;
-  dayClicked: (m: Moment) => void;
-  dayHovered: (m: Moment) => void;
-  day: Moment;
+  dayClicked: (m: Dayjs) => void;
+  dayHovered: (m: Dayjs) => void;
+  day: Dayjs;
   title: string;
 }
 

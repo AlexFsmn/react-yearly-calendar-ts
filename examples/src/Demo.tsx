@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import moment, { Moment } from "moment";
+import dayjs, { Dayjs } from "dayjs";
 import { Calendar, CalendarControls } from "react-yearly-calendar-ts";
+import weekday from "dayjs/plugin/weekday";
+import sv from "dayjs/locale/sv";
+dayjs.extend(weekday);
 
 const Demo = () => {
-  const today = moment();
+  const today = dayjs();
   const [year, setYear] = useState<number>(today.year());
-  const [selectedDay, setSelectedDay] = useState<Moment>(today);
-  const [selectedRange, setSelectedRange] = useState<Moment[]>([
+  const [selectedDay, setSelectedDay] = useState<Dayjs>(today);
+  const [selectedRange, setSelectedRange] = useState<Dayjs[]>([
     today,
-    moment(today).add(15, "day"),
+    dayjs(today).add(15, "day"),
   ]);
   const [showDaysOfWeek, setShowDaysOfWeek] = useState<boolean>(true);
   const [showTodayBtn, setShowTodayBtn] = useState<boolean>(true);
@@ -16,6 +19,32 @@ const Demo = () => {
   const [selectRange, setSelectRange] = useState<boolean>(false);
   const [forceFullWeeks, setForceFullWeeks] = useState<boolean>(false);
   const [firstDayOfWeek, setFirstDayOfWeek] = useState<number>(0);
+
+  const customCSSclasses = {
+    holidays: [
+      "2018-04-25",
+      "2018-05-01",
+      "2018-06-02",
+      "2018-08-15",
+      "2018-11-01",
+    ],
+    spring: {
+      start: "2018-03-21",
+      end: "2018-6-20",
+    },
+    summer: {
+      start: "2018-06-21",
+      end: "2018-09-22",
+    },
+    autumn: {
+      start: "2018-09-23",
+      end: "2018-12-21",
+    },
+    weekend: "Sat,Sun",
+    winter: (day: Dayjs) =>
+      day.isBefore(dayjs(new Date(2018, 2, 21))) ||
+      day.isAfter(new Date(2018, 11, 21)),
+  };
 
   const onPrevYear = () => {
     setYear(year - 1);
@@ -26,19 +55,19 @@ const Demo = () => {
   };
 
   const goToToday = () => {
-    const today = moment();
+    const today = dayjs();
 
     setSelectedDay(today);
-    setSelectedRange([today, moment(today).add(15, "day")]);
+    setSelectedRange([today, dayjs(today).add(15, "day")]);
     setYear(today.year());
   };
 
-  const datePicked = (date: Moment) => {
+  const datePicked = (date: Dayjs) => {
     setSelectedDay(date);
-    setSelectedRange([date, moment(date).add(15, "day")]);
+    setSelectedRange([date, dayjs(date).add(15, "day")]);
   };
 
-  const rangePicked = (start: Moment, end: Moment) => {
+  const rangePicked = (start: Dayjs, end: Dayjs) => {
     setSelectedRange([start, end]);
     setSelectedDay(start);
   };
@@ -79,6 +108,7 @@ const Demo = () => {
           goToToday={() => goToToday()}
         />
         <Calendar
+          locale={sv}
           year={year}
           selectedDay={selectedDay}
           showDaysOfWeek={showDaysOfWeek}
@@ -87,8 +117,9 @@ const Demo = () => {
           firstDayOfWeek={firstDayOfWeek}
           selectRange={selectRange}
           selectedRange={selectedRange}
-          onPickDate={(date: Moment) => datePicked(date)}
-          onPickRange={(start: Moment, end: Moment) => rangePicked(start, end)}
+          onPickDate={(date: Dayjs) => datePicked(date)}
+          onPickRange={(start: Dayjs, end: Dayjs) => rangePicked(start, end)}
+          customClasses={customCSSclasses}
         />
       </div>
 
@@ -145,7 +176,7 @@ const Demo = () => {
             >
               {[0, 1, 2, 3, 4, 5, 6].map((i) => (
                 <option key={i} value={i}>
-                  {moment().weekday(i).format("ddd")}
+                  {dayjs().weekday(i).format("ddd")}
                 </option>
               ))}
             </select>

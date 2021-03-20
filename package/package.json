@@ -5,7 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "@types/react-dom": "^16.9.0",
-    "react": "^16.13.1"
+    "react": "^16.13.1",
+    "dayjs": "1.10.4"
   },
   "peerDependencies": {},
   "devDependencies": {
