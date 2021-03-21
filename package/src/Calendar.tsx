@@ -10,6 +10,7 @@ dayjs.extend(weekday);
 
 interface Props {
   year: number;
+  month: number;
   forceFullWeeks: boolean;
   showDaysOfWeek: boolean;
   showWeekSeparators: boolean;
@@ -22,7 +23,10 @@ interface Props {
   selectedDay: Dayjs;
   customClasses: any | (() => void);
   titles: (m: Dayjs) => string;
+  showCurrentMonthOnlyOnMobile?: boolean;
   locale?: Locale;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
 }
 
 const defaultProps = {
@@ -41,6 +45,7 @@ const defaultProps = {
 
 function Calendar(props: Props) {
   const [selectingRange, setSelectingRange] = useState<Dayjs[]>();
+
   if (props.locale) {
     dayjs.locale(props.locale);
   }
@@ -124,17 +129,42 @@ function Calendar(props: Props) {
     );
   };
 
-  const months = () => {
-    return range(0, 12).map((month) => (
-      <Month
-        month={month}
-        key={`month-${month}`}
-        dayClicked={(d, classes) => dayClicked(d, classes)}
-        dayHovered={(d) => dayHovered(d)}
-        {...props}
-        selectingRange={selectingRange}
-      />
-    ));
+  const getMonthRange = (showCurrentMonthOnly: boolean) => {
+    return showCurrentMonthOnly === true
+      ? range(props.month, props.month + 1)
+      : range(0, 12);
+  };
+
+  const onPrevMonth = () => {
+    if (props.month > 0) {
+      props.onPrevMonth();
+    }
+  };
+
+  const onNextMonth = () => {
+    if (props.month < 11) {
+      props.onNextMonth();
+    }
+  };
+
+  const months = (showCurrentMonthOnlyOnMobile: boolean) => {
+    return (
+      <>
+        {getMonthRange(showCurrentMonthOnlyOnMobile).map((m) => (
+          <Month
+            {...props}
+            month={m}
+            key={`month-${m}`}
+            dayClicked={(d, classes) => dayClicked(d, classes)}
+            dayHovered={(d) => dayHovered(d)}
+            selectingRange={selectingRange}
+            showCurrentMonthOnly={showCurrentMonthOnlyOnMobile}
+            onPrevMonth={onPrevMonth}
+            onNextMonth={onNextMonth}
+          />
+        ))}
+      </>
+    );
   };
 
   return (
@@ -142,7 +172,10 @@ function Calendar(props: Props) {
       <thead className="day-headers">
         {props.showDaysOfWeek ? renderDaysOfWeek() : null}
       </thead>
-      <tbody>{months()}</tbody>
+      <tbody className="desktop-only-month">{months(false)}</tbody>
+      <tbody className="mobile-only-month">
+        {months(props.showCurrentMonthOnlyOnMobile === true)}
+      </tbody>
     </table>
   );
 }

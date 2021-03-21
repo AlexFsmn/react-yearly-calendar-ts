@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { Locale } from "dayjs/locale/*";
 interface Props {
     year: number;
+    month: number;
     forceFullWeeks: boolean;
     showDaysOfWeek: boolean;
     showWeekSeparators: boolean;
@@ -15,7 +16,10 @@ interface Props {
     selectedDay: Dayjs;
     customClasses: any | (() => void);
     titles: (m: Dayjs) => string;
+    showCurrentMonthOnlyOnMobile?: boolean;
     locale?: Locale;
+    onPrevMonth: () => void;
+    onNextMonth: () => void;
 }
 declare function Calendar(props: Props): JSX.Element;
 declare namespace Calendar {

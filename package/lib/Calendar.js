@@ -93,12 +93,28 @@ function Calendar(props) {
             React.createElement("th", null, "\u00A0"),
             days));
     };
-    var months = function () {
-        return range(0, 12).map(function (month) { return (React.createElement(Month, __assign({ month: month, key: "month-" + month, dayClicked: function (d, classes) { return dayClicked(d, classes); }, dayHovered: function (d) { return dayHovered(d); } }, props, { selectingRange: selectingRange }))); });
+    var getMonthRange = function (showCurrentMonthOnly) {
+        return showCurrentMonthOnly === true
+            ? range(props.month, props.month + 1)
+            : range(0, 12);
+    };
+    var onPrevMonth = function () {
+        if (props.month > 0) {
+            props.onPrevMonth();
+        }
+    };
+    var onNextMonth = function () {
+        if (props.month < 11) {
+            props.onNextMonth();
+        }
+    };
+    var months = function (showCurrentMonthOnlyOnMobile) {
+        return (React.createElement(React.Fragment, null, getMonthRange(showCurrentMonthOnlyOnMobile).map(function (m) { return (React.createElement(Month, __assign({}, props, { month: m, key: "month-" + m, dayClicked: function (d, classes) { return dayClicked(d, classes); }, dayHovered: function (d) { return dayHovered(d); }, selectingRange: selectingRange, showCurrentMonthOnly: showCurrentMonthOnlyOnMobile, onPrevMonth: onPrevMonth, onNextMonth: onNextMonth }))); })));
     };
     return (React.createElement("table", { className: "calendar" },
         React.createElement("thead", { className: "day-headers" }, props.showDaysOfWeek ? renderDaysOfWeek() : null),
-        React.createElement("tbody", null, months())));
+        React.createElement("tbody", { className: "desktop-only-month" }, months(false)),
+        React.createElement("tbody", { className: "mobile-only-month" }, months(props.showCurrentMonthOnlyOnMobile === true))));
 }
 Calendar.defaultProps = defaultProps;
 export default Calendar;

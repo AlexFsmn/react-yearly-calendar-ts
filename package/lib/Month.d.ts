@@ -14,6 +14,9 @@ interface Props {
     titles?: (m: Dayjs) => string;
     dayClicked: (day: Dayjs, classes: any) => void;
     dayHovered: (day: Dayjs) => void;
+    showCurrentMonthOnly: boolean;
+    onPrevMonth: () => void;
+    onNextMonth: () => void;
 }
 declare const Month: {
     (props: Props): JSX.Element;

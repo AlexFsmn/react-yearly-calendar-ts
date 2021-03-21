@@ -8,6 +8,7 @@ dayjs.extend(weekday);
 const Demo = () => {
   const today = dayjs();
   const [year, setYear] = useState<number>(today.year());
+  const [month, setMonth] = useState<number>(today.month());
   const [selectedDay, setSelectedDay] = useState<Dayjs>(today);
   const [selectedRange, setSelectedRange] = useState<Dayjs[]>([
     today,
@@ -54,12 +55,21 @@ const Demo = () => {
     setYear(year + 1);
   };
 
+  const onPrevMonth = () => {
+    setMonth(month - 1);
+  };
+
+  const onNextMonth = () => {
+    setMonth(month + 1);
+  };
+
   const goToToday = () => {
     const today = dayjs();
 
     setSelectedDay(today);
     setSelectedRange([today, dayjs(today).add(15, "day")]);
     setYear(today.year());
+    setMonth(today.month());
   };
 
   const datePicked = (date: Dayjs) => {
@@ -110,6 +120,7 @@ const Demo = () => {
         <Calendar
           locale={sv}
           year={year}
+          month={month}
           selectedDay={selectedDay}
           showDaysOfWeek={showDaysOfWeek}
           forceFullWeeks={forceFullWeeks}
@@ -120,6 +131,9 @@ const Demo = () => {
           onPickDate={(date: Dayjs) => datePicked(date)}
           onPickRange={(start: Dayjs, end: Dayjs) => rangePicked(start, end)}
           customClasses={customCSSclasses}
+          showCurrentMonthOnlyOnMobile={true}
+          onPrevMonth={() => onPrevMonth()}
+          onNextMonth={() => onNextMonth()}
         />
       </div>
 

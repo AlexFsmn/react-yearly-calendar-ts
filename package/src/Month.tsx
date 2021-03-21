@@ -19,6 +19,9 @@ interface Props {
   titles?: (m: Dayjs) => string;
   dayClicked: (day: Dayjs, classes: any) => void;
   dayHovered: (day: Dayjs) => void;
+  showCurrentMonthOnly: boolean;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
 }
 
 const defaultProps = {
@@ -29,97 +32,6 @@ const defaultProps = {
 };
 
 const Month = (props: Props) => {
-  // const [selectingRangeStart, setSelectingRangeStart] = useState<number>();
-  // const [selectingRangeEnd, setSelectingRangeEnd] = useState<number>();
-
-  // shouldComponentUpdate(nextProps) {
-  //   const { month, selectingRange, selectedRange } = props;
-  //   const { selectingRangeStart, selectingRangeEnd } = this.state;
-
-  //   // full repaint for some global-affecting rendering props
-  //   if (
-  //     this.props.year !== nextProps.year ||
-  //     this.props.forceFullWeeks !== nextProps.forceFullWeeks ||
-  //     this.props.showWeekSeparators !== nextProps.showWeekSeparators ||
-  //     this.props.firstDayOfWeek !== nextProps.firstDayOfWeek ||
-  //     this.props.selectRange !== nextProps.selectRange ||
-  //     this.props.customClasses !== nextProps.customClasses ||
-  //     (this.props.selectRange && selectingRange === undefined && nextProps.selectingRange === undefined)
-  //   ) {
-  //     return true;
-  //   }
-
-  //   // if we get to this point and we are in 'selectRange' mode then it's likely that we have a change in selectingRange
-  //   if (this.props.selectRange) {
-  //     if (selectingRange === undefined) {
-  //       let oldRangeStart = selectedRange[0].month();
-  //       let oldRangeEnd = selectedRange[1].month();
-  //       if (oldRangeStart > oldRangeEnd) {
-  //         [oldRangeStart, oldRangeEnd] = [oldRangeEnd, oldRangeStart];
-  //       }
-
-  //       let newRangeStart = nextProps.selectingRange[0].month();
-  //       let newRangeEnd = nextProps.selectingRange[1].month();
-  //       if (newRangeStart > newRangeEnd) {
-  //         [newRangeStart, newRangeEnd] = [newRangeEnd, newRangeStart];
-  //       }
-
-  //       // first time it's called, repaint months in old selectedRange and next selectingRange
-  //       return (oldRangeStart <= month && month <= oldRangeEnd) || (newRangeStart <= month && month <= newRangeEnd);
-  //     } else if (nextProps.selectingRange === undefined) {
-  //       // last time it's called, repaint months in previous selectingRange
-  //       let oldRangeStart = selectingRangeStart;
-  //       let oldRangeEnd = selectingRangeEnd;
-  //       if (oldRangeStart > oldRangeEnd) {
-  //         [oldRangeStart, oldRangeEnd] = [oldRangeEnd, oldRangeStart];
-  //       }
-
-  //       let newRangeStart = nextProps.selectedRange[0].month();
-  //       let newRangeEnd = nextProps.selectedRange[1].month();
-  //       if (newRangeStart > newRangeEnd) {
-  //         [newRangeStart, newRangeEnd] = [newRangeEnd, newRangeStart];
-  //       }
-
-  //       // called on day hovering changed
-  //       return (oldRangeStart <= month && month <= oldRangeEnd) || (newRangeStart <= month && month <= newRangeEnd);
-  //     }
-  //     // called on day hovering changed
-  //     let oldRangeStart = selectingRangeStart;
-  //     let oldRangeEnd = selectingRangeEnd;
-  //     if (oldRangeStart > oldRangeEnd) [oldRangeStart, oldRangeEnd] = [oldRangeEnd, oldRangeStart];
-
-  //     let newRangeStart = nextProps.selectingRange[0].month();
-  //     let newRangeEnd = nextProps.selectingRange[1].month();
-  //     if (newRangeStart > newRangeEnd) {
-  //       [newRangeStart, newRangeEnd] = [newRangeEnd, newRangeStart];
-  //     }
-
-  //     return (oldRangeStart <= month && month <= oldRangeEnd) || (newRangeStart <= month && month <= newRangeEnd);
-  //   } else if (this.props.selectedDay.month() === month || nextProps.selectedDay.month() === month) {
-  //     // single selectedDay changed: repaint months where selectedDay was and where will be
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
-
-  // useEffect(() => {
-  //   if (props.selectingRange !== undefined && props.selectingRange.length > 1) {
-  //     setSelectingRangeStart(props.selectingRange[0].month());
-  //     setSelectingRangeEnd(props.selectingRange[1].month());
-  //   }
-  // }, [props.selectingRange]);
-
-  const dayClicked = (day: Dayjs, classes: any) => {
-    props.dayClicked(day, classes);
-  };
-
-  const dayHovered = (day: Dayjs) => {
-    if (props.selectRange) {
-      props.dayHovered(day);
-    }
-  };
-
   const renderMonthDays = () => {
     const {
       year,
@@ -134,7 +46,18 @@ const Month = (props: Props) => {
       customClasses,
       titles,
     } = props;
+
     const monthStart = dayjs(new Date(year, month, 1)); // current day
+
+    const dayClicked = (day: Dayjs, classes: any) => {
+      props.dayClicked(day, classes);
+    };
+
+    const dayHovered = (day: Dayjs) => {
+      if (props.selectRange) {
+        props.dayHovered(day);
+      }
+    };
 
     // number of days to insert before the first of the month to correctly align the weekdays
     let prevMonthDaysCount = monthStart.weekday();
@@ -240,15 +163,38 @@ const Month = (props: Props) => {
         />
       );
     });
-
     return days;
+  };
+
+  const onPrevMonth = () => {
+    props.onPrevMonth();
+  };
+
+  const onNextMonth = () => {
+    props.onNextMonth();
   };
 
   return (
     <tr>
-      <td className="month-name">
-        {dayjs(new Date(props.year, props.month, 1)).format("MMM")}
-      </td>
+      {props.showCurrentMonthOnly ? (
+        <td className="month-name">
+          <div className="calendar-month-controls">
+            <div className="month-control" onClick={() => onPrevMonth()}>
+              &laquo;
+            </div>
+            <div className="current-month">
+              {dayjs(new Date(props.year, props.month, 1)).format("MMM")}
+            </div>
+            <div className="month-control" onClick={() => onNextMonth()}>
+              &raquo;
+            </div>
+          </div>
+        </td>
+      ) : (
+        <td className="month-name">
+          {dayjs(new Date(props.year, props.month, 1)).format("MMM")}
+        </td>
+      )}
       {renderMonthDays()}
     </tr>
   );
