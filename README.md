@@ -2,7 +2,7 @@
 
 [React](https://facebook.github.io/react/) calendar component with yearly view.
 
-# Note! This is a fork from the awesome people at BelkaLabs.
+# Note! This is a fork. The original project was created by awesome people at BelkaLabs.
 Original project found here: https://github.com/BelkaLab/react-yearly-calendar
 
 This fork contains a few fixes:
