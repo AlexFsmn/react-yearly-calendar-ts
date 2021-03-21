@@ -13,9 +13,6 @@ This fork contains a few fixes:
 ✔ Added locale support<br/>
 ✔ Added better mobile support
 
-
-![http://alexfsmn.github.io/react-yearly-calendar-ts/](examples/screen.png)
-
 # Install
 ```bash
 $ npm install react-yearly-calendar-ts
@@ -24,7 +21,7 @@ $ npm install react-yearly-calendar-ts
 # Demo
 **[http://belkalab.github.io/react-yearly-calendar/](https://belkalab.github.io/react-yearly-calendar)**
 
-![http://belkalab.github.io/react-yearly-calendar/](examples/screen.png)
+![http://alexfsmn.github.io/react-yearly-calendar-ts/](examples/screen.png)
 
 Or taste an example usage below:
 ```js
