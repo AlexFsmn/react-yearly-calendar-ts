@@ -13,6 +13,9 @@ This fork contains a few fixes:
 ✔ Added locale support<br/>
 ✔ Added better mobile support
 
+
+![http://alexfsmn.github.io/react-yearly-calendar-ts/](examples/screen.png)
+
 # Install
 ```bash
 $ npm install react-yearly-calendar-ts
