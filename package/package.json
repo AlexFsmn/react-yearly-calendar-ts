@@ -1,13 +1,25 @@
 {
   "name": "react-yearly-calendar-ts",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "author": "alexfsmn",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:alexfsmn/react-yearly-calendar-ts"
+  },
+  "keywords": [
+    "react",
+    "react.js",
+    "calendar",
+    "year",
+    "yearly",
+    "react-component"
+  ],
   "dependencies": {
     "react": "^16.13.1",
     "dayjs": "1.10.4"
   },
-  "peerDependencies": {},
   "devDependencies": {
     "@types/node": "14.14.35",
     "@types/react": "^16.9.0",
