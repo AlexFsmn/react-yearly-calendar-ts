@@ -164,3 +164,9 @@ Clone and run
 ```bash
 $ npm install
 ```
+
+## Running the Example
+Run this command in the package folder before starting the example:
+```bash
+$ npm link ..\examples\node_modules\react\
+```
