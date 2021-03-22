@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { Calendar, CalendarControls } from "react-yearly-calendar-ts";
 import weekday from "dayjs/plugin/weekday";
 import sv from "dayjs/locale/sv";
+// import en from "dayjs/locale/en";
 dayjs.extend(weekday);
 
 const Demo = () => {
@@ -28,6 +29,7 @@ const Demo = () => {
       "2018-06-02",
       "2018-08-15",
       "2018-11-01",
+      "2018-11-27",
     ],
     spring: {
       start: "2018-03-21",
@@ -41,7 +43,7 @@ const Demo = () => {
       start: "2018-09-23",
       end: "2018-12-21",
     },
-    weekend: "Sat,Sun",
+    weekend: "lör,sön", // "Sat,Sun"
     winter: (day: Dayjs) =>
       day.isBefore(dayjs(new Date(2018, 2, 21))) ||
       day.isAfter(new Date(2018, 11, 21)),

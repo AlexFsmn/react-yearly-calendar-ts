@@ -73,39 +73,39 @@ var Month = function (props) {
                 if (customClasses instanceof Function) {
                     classes.push(customClasses(day));
                 }
-            }
-            if ((i - 1) % 7 === 0) {
-                // sunday
-                classes.push("bolder");
-            }
-            if (customClasses) {
-                Object.keys(customClasses).forEach(function (k) {
-                    var obj = customClasses[k];
-                    // Order here is important! Everything is instance of Object in js
-                    if (typeof obj === "string") {
-                        if (obj.indexOf(day.format("ddd")) > -1) {
-                            classes.push(k);
-                        }
-                    }
-                    else if (obj instanceof Array) {
-                        obj.forEach(function (d) {
-                            if (day.format("YYYY-MM-DD") === d)
+                if ((i - 1) % 7 === 0) {
+                    // first day of the week
+                    classes.push("bolder");
+                }
+                if (customClasses) {
+                    Object.keys(customClasses).forEach(function (k) {
+                        var obj = customClasses[k];
+                        // Order here is important! Everything is instance of Object in js
+                        if (typeof obj === "string") {
+                            if (obj.indexOf(day.format("ddd")) > -1) {
                                 classes.push(k);
-                        });
-                    }
-                    else if (obj instanceof Function) {
-                        if (obj(day)) {
-                            classes.push(k);
+                            }
                         }
-                    }
-                    else if (obj.start && obj.end) {
-                        var startDate = dayjs(obj.start, "YYYY-MM-DD").add(-1, "days");
-                        var endDate = dayjs(obj.end, "YYYY-MM-DD").add(1, "days");
-                        if (day.isBetween(startDate, endDate)) {
-                            classes.push(k);
+                        else if (obj instanceof Array) {
+                            obj.forEach(function (d) {
+                                if (day.format("YYYY-MM-DD") === d)
+                                    classes.push(k);
+                            });
                         }
-                    }
-                });
+                        else if (obj instanceof Function) {
+                            if (obj(day)) {
+                                classes.push(k);
+                            }
+                        }
+                        else if (obj.start && obj.end) {
+                            var startDate = dayjs(obj.start, "YYYY-MM-DD").add(-1, "days");
+                            var endDate = dayjs(obj.end, "YYYY-MM-DD").add(1, "days");
+                            if (day.isBetween(startDate, endDate)) {
+                                classes.push(k);
+                            }
+                        }
+                    });
+                }
             }
             if (showWeekSeparators) {
                 if ((i - 1) % 7 === firstDayOfWeek && days.length) {
