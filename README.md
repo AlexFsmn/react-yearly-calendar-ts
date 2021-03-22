@@ -48,6 +48,7 @@ ReactDOM.render(
 | Prop | Type | Description | Default |
 |------|------|-------------|---------|
 | **year** | React.PropTypes.number.isRequired | year to be displayed | current year |
+| **month** | React.PropTypes.number.isRequired | month to be displayed | current month |
 | selectedDay | moment.js object | selected day | today |
 | forceFullWeeks | React.PropTypes.bool | match calendar row end with row start | false |
 | showDaysOfWeek | React.PropTypes.bool | show table header with days of week | true |
@@ -57,6 +58,9 @@ ReactDOM.render(
 | selectedRange | `[moment.js obj, moment.js obj]` | selected range of dates in the form `[start, end]` | |
 | customClasses | React.PropTypes.object, React.PropTypes.func | custom days/periods coloring (see section below) | |
 | titles | React.PropTypes.func | function mapping dates to html titles | |
+| onPrevMonth| React.PropTypes.func | function() {} | called on user clicking `«` (*previous month button*) |
+| onNextMonth| React.PropTypes.func | function() {} | called on user clicking `»` (*next month button*) |
+| showCurrentMonthOnlyOnMobile| React.PropTypes.bool | setting to only showing one month on mobile | |
 
 #### CalendarControls
 
